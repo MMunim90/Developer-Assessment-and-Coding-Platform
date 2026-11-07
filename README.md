@@ -1,23 +1,25 @@
-# Library Management System
+# Developer Assessment and Coding Platform (DACP)
 
-A full-stack web application built with React, FastAPI, and Supabase PostgreSQL.
+A full-stack web application designed to help developers practice coding challenges, participate in programming contests, evaluate their technical skills, and track their problem-solving progress.
 
-- Backend: [LibraryHub - Backend](https://github.com/MMunim90/FastAPI-Fullstack-Project-Backend)
+Built with React, FastAPI, and Supabase PostgreSQL.
+
+- **Backend:** [DACP - Backend](#)
 
 ## 🚀 Tech Stack
 
 ### Frontend
 - React
-- JavaScript
+- JavaScript (ES6+)
 - HTML5 & CSS3
 - Tailwind CSS
-- Daisy UI
+- DaisyUI
 
 ### Backend
 - Python
 - FastAPI
 - Pydantic
-- SQLAlchemy 
+- SQLAlchemy
 
 ### Database
 - Supabase
@@ -31,10 +33,18 @@ A full-stack web application built with React, FastAPI, and Supabase PostgreSQL.
 ## ✨ Features
 
 - Responsive and user-friendly interface
+- User authentication and authorization
+- Coding challenges with different difficulty levels
+- Online coding and problem-solving environment
+- Multiple programming language support (planned)
+- Code submission and evaluation
+- Programming contests and competitions
+- Technical assessments and skill evaluation
+- Developer leaderboard and ranking system
+- Performance tracking and progress monitoring
 - RESTful API development with FastAPI
 - PostgreSQL database integration using Supabase
 - Data validation with Pydantic
-- CRUD operations (Create, Read, Update, Delete)
 - Frontend and backend separation
 
 ## 🏗️ Architecture
@@ -46,33 +56,42 @@ React Frontend
       v
 FastAPI Backend
       |
-      | Database Queries
+      | SQLAlchemy ORM
       v
 Supabase PostgreSQL
+      |
+      | Assessment & Coding Data
+      v
+Challenges / Submissions / Results
 ```
 
 ## 📁 Project Structure
 
 ```text
-FastAPI-Fullstack-Project/
+Developer-Assessment-and-Coding-Platform/
+│
 ├── frontend/
 │   ├── public/
 │   ├── src/
+│   │   ├── assets/
 │   │   ├── components/
+│   │   ├── context/
+│   │   ├── layouts/
 │   │   ├── pages/
+│   │   ├── routes/
 │   │   ├── services/
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   └── package.json
 │
 ├── backend/
-│    ├── router/
-│    ├── .env
-│    ├── .gitignore
-│    ├── database.py
-│    ├── main.py
-│    ├── models.py
-│    └── requirements.txt
+│   ├── router/
+│   ├── .env
+│   ├── .gitignore
+│   ├── database.py
+│   ├── main.py
+│   ├── models.py
+│   └── requirements.txt
 │
 └── README.md
 ```
@@ -91,11 +110,13 @@ Make sure you have installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/MMunim90/FastAPI-Fullstack-Project.git
-cd FastAPI-Fullstack-Project
+git clone <your-dacp-repository-url>
+cd Developer-Assessment-and-Coding-Platform
 ```
 
 ### 2. Set Up the Backend
+
+Navigate to the backend directory:
 
 ```bash
 cd backend
@@ -104,13 +125,13 @@ python -m venv venv
 
 Activate the virtual environment.
 
-Windows:
+**Windows:**
 
 ```bash
 venv\Scripts\activate
 ```
 
-Linux/macOS:
+**Linux/macOS:**
 
 ```bash
 source venv/bin/activate
@@ -134,7 +155,7 @@ Start the FastAPI server:
 uvicorn main:app --reload
 ```
 
-The backend will run at:
+Backend server:
 
 `http://127.0.0.1:8000`
 
@@ -144,14 +165,12 @@ Interactive API documentation:
 
 ### 3. Set Up the Frontend
 
-Open a new terminal:
+Open a new terminal and navigate to the frontend directory:
 
 ```bash
 cd frontend
 npm install
 ```
-
-Configure your frontend environment variables if required.
 
 Create a `.env` file:
 
@@ -170,16 +189,17 @@ Open the local URL displayed in your terminal.
 ## 🗄️ Database Setup
 
 1. Create a project in [Supabase](https://supabase.com/).
-2. Set up your PostgreSQL database tables.
+2. Set up the required PostgreSQL database tables.
 3. Copy the appropriate database connection string from your Supabase project.
 4. Add the connection string to the backend `.env` file.
-5. Ensure your database credentials are kept private.
+5. Configure the required database relationships and constraints.
+6. Keep your database credentials private.
 
 ## 🔐 Environment Variables
 
 Never commit secret keys, passwords, or database credentials to GitHub.
 
-Add the following to `.gitignore`:
+Add the following entries to `.gitignore`:
 
 ```gitignore
 .env
@@ -198,16 +218,19 @@ FastAPI automatically generates interactive API documentation.
 
 ## 🛠️ Development Workflow
 
-1. Build the user interface with React.
-2. Develop API endpoints with FastAPI.
-3. Connect the backend to Supabase PostgreSQL.
-4. Integrate the frontend with the backend API.
-5. Test API endpoints and database operations.
-6. Test the complete application.
+1. Design and develop the user interface using React.
+2. Implement backend APIs using FastAPI.
+3. Configure Supabase PostgreSQL database integration.
+4. Develop coding challenges and assessment functionalities.
+5. Integrate frontend components with backend APIs.
+6. Implement code submission and evaluation workflows.
+7. Test API endpoints, database operations, and application functionality.
 
 ## 🚧 Project Status
 
 Currently under development.
+
+New features and improvements will be added as development progresses.
 
 ## 👨‍💻 Author
 
@@ -218,4 +241,4 @@ Currently under development.
 
 ## 📄 License
 
-This project is licensed under the MIT License. Add a `LICENSE` file if you intend to distribute it under that license.
+This project is licensed under the MIT License. Add a `LICENSE` file if you intend to distribute it under this license.

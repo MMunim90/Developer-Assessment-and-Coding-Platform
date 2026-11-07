@@ -1,8 +1,15 @@
 import { useContext, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Link, useNavigate } from "react-router";
+import {
+  Eye,
+  EyeOff,
+  Code2,
+  ArrowRight,
+  LockKeyhole,
+  UserRound,
+} from "lucide-react";
 import { baseURL } from "../services/BaseURL";
 import { AuthContext } from "../context/AuthContext";
-import Swal from "sweetalert2";
 import { Bounce, toast } from "react-toastify";
 
 const Login = () => {
@@ -11,7 +18,9 @@ const Login = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { authUser, setAuthUser } = useContext(AuthContext);
+
+  const { setAuthUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,8 +28,6 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // username=munim&password=12345
-
       const formData = new URLSearchParams();
 
       formData.append("username", username);
@@ -28,16 +35,21 @@ const Login = () => {
 
       const res = await fetch(`${baseURL}/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
         body: formData,
       });
 
       const data = await res.json();
-      // console.log(data)
 
-      const accessToken = data?.access_token;
+      if (!res.ok || !data?.access_token) {
+        throw new Error(
+          data?.detail || "Incorrect username or password."
+        );
+      }
 
-      localStorage.setItem("user_token", accessToken);
+      const accessToken = data.access_token;
 
       const userRes = await fetch(`${baseURL}/user_profile`, {
         headers: {
@@ -46,161 +58,204 @@ const Login = () => {
       });
 
       const userData = await userRes.json();
-      // console.log(userData);
 
-      if (userData.detail == "User Not Found!!!") {
-        toast.error("Incorrect username or password", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "dark",
-          transition: Bounce,
-          className: "libraryhub-toast",
-          progressClassName: "libraryhub-toast-progress",
-        });
-
-        return;
-      } else {
-        document.getElementById("my_modal_3").close();
-        Swal.fire({
-          icon: "success",
-          title: "Hey...",
-          text: "Login successful!!!",
-          background: "#0f172a",
-          color: "#e2e8f0",
-          confirmButtonColor: "#60a5fa",
-          iconColor: "#60a5fa",
-          customClass: {
-            popup: "libraryhub-swal",
-            title: "libraryhub-swal-title",
-            confirmButton: "libraryhub-swal-button",
-          },
-        });
+      if (!userRes.ok || userData?.detail === "User Not Found!!!") {
+        throw new Error(
+          userData?.detail || "Unable to retrieve user information."
+        );
       }
 
+      localStorage.setItem("user_token", accessToken);
       setAuthUser(userData);
-    } catch (error) {
-      
-      // Close signup and login modals
-      document.getElementById("my_modal_3")?.close();
 
-      Swal.fire({
-        icon: "error",
-        title: "Login Failed!",
-        text: error.message || "Something went wrong. Please try again.",
-        background: "#0f172a",
-        color: "#e2e8f0",
-        confirmButtonColor: "#60a5fa",
-        iconColor: "#f87171",
-        confirmButtonText: "Okay",
-        customClass: {
-          popup: "libraryhub-swal",
-          title: "libraryhub-swal-title",
-          confirmButton: "libraryhub-swal-button",
-        },
+      toast.success("Login successful! Welcome back.", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+        transition: Bounce,
       });
 
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      toast.error(error.message || "Something went wrong. Please try again.", {
+        position: "top-right",
+        autoClose: 4000,
+        theme: "dark",
+        transition: Bounce,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // console.log(authUser);
   return (
-    <div className="modal-box relative max-w-md rounded-2xl p-8 shadow-2xl">
-      {/* Close Button */}
-      <form method="dialog">
-        <button className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4">
-          ✕
-        </button>
-      </form>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#08090D] px-4 py-12 text-slate-100">
 
-      {/* Header */}
-      <div className="mb-6 text-center">
-        <h3 className="text-3xl font-bold">Welcome Back!</h3>
-        <p className="mt-2 text-sm text-base-content/60">
-          Sign in to continue to your account.
-        </p>
-      </div>
+      {/* Background Effects */}
+      <div className="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full bg-blue-600/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-violet-600/10 blur-[120px]" />
 
-      {/* Login Form */}
-      <form className="space-y-4" onSubmit={handleLogin}>
-        <fieldset className="fieldset">
-          <label className="label font-medium">Username</label>
-          <input
-            type="text"
-            className="input input-bordered w-full"
-            placeholder="Enter your username"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+      {/* Login Card */}
+      <div className="relative z-10 w-full max-w-md">
 
-          <label className="label mt-2 font-medium">Password</label>
-
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              className="input input-bordered w-full pr-12"
-              placeholder="Enter your password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+        {/* Brand */}
+        <Link
+          to="/"
+          className="mb-10 flex items-center justify-center gap-3"
+        >
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-blue-400">
+            <Code2 size={25} />
           </div>
 
-          {/* <div className="mt-2 text-right">
-            <a
-              href="/forgot-password"
-              className="link link-hover text-sm text-primary"
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              DACP<span className="text-blue-400">.</span>
+            </h1>
+            <p className="text-[10px] font-medium tracking-[0.2em] text-slate-500">
+              DEVELOPER PLATFORM
+            </p>
+          </div>
+        </Link>
+
+        {/* Form Container */}
+        <div className="rounded-2xl border border-white/[0.08] bg-[#111318]/90 p-7 shadow-2xl shadow-black/30 sm:p-9">
+
+          {/* Heading */}
+          <div className="mb-8">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-500/10 text-blue-400">
+              <LockKeyhole size={23} />
+            </div>
+
+            <h2 className="text-3xl font-bold tracking-tight">
+              Welcome back
+            </h2>
+
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              Sign in to continue your coding journey and access your
+              developer dashboard.
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="space-y-5">
+
+            {/* Username */}
+            <div>
+              <label
+                htmlFor="username"
+                className="mb-2 block text-sm font-medium text-slate-300"
+              >
+                Username
+              </label>
+
+              <div className="relative">
+                <UserRound
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                />
+
+                <input
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  autoComplete="username"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="h-12 w-full rounded-lg border border-white/10 bg-[#0B0D12] pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500/60 focus:ring-2 focus:ring-blue-500/10"
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-slate-300"
+              >
+                Password
+              </label>
+
+              <div className="relative">
+                <LockKeyhole
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
+                />
+
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-12 w-full rounded-lg border border-white/10 bg-[#0B0D12] pl-11 pr-12 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500/60 focus:ring-2 focus:ring-blue-500/10"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-blue-400"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff size={19} />
+                  ) : (
+                    <Eye size={19} />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="group mt-3 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-blue-600 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Forgot password?
-            </a>
-          </div> */}
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm" />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  Sign in to DACP
+                  <ArrowRight
+                    size={18}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
+                </>
+              )}
+            </button>
+          </form>
 
-          <button
-            type="submit"
-            className="btn btn-primary mt-10 w-full"
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <span className="loading loading-spinner loading-sm"></span>
-                Signing in...
-              </>
-            ) : (
-              "Login"
-            )}
-          </button>
-        </fieldset>
-      </form>
+          {/* Signup Link */}
+          <div className="mt-7 border-t border-white/[0.07] pt-6 text-center">
+            <p className="text-sm text-slate-400">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="font-semibold text-blue-400 transition hover:text-blue-300"
+              >
+                Create an account
+              </Link>
+            </p>
+          </div>
+        </div>
 
-      {/* Sign Up Link */}
-      <div className="mt-6 text-center text-sm">
-        Don't have an account?{" "}
-        <button
-          type="button"
-          className="link link-primary font-semibold"
-          onClick={() => {
-            document.getElementById("my_modal_3").close();
-            document.getElementById("signup_modal").showModal();
-          }}
+        {/* Footer */}
+        <p className="mt-8 text-center text-xs text-slate-600">
+          © {new Date().getFullYear()} DACP. All rights reserved.
+        </p>
+
+        <Link
+          to="/"
+          className="mt-3 block text-center text-xs text-slate-500 transition hover:text-blue-400"
         >
-          Sign up
-        </button>
+          ← Back to home
+        </Link>
       </div>
     </div>
   );

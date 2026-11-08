@@ -19,6 +19,7 @@ import AdminProtected from "./AdminProtected";
 import ReturnBooks from "../pages/admin/ReturnBooks";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
+import HelpCenter from "../pages/HelpCenter";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
       {
         path: "/allBooks",
         element: <AllBooks />,
+      },
+      {
+        path: "/help",
+        element: <HelpCenter />,
+      },
+      {
+        path: "/faq",
+        element: <ContactUs />,
       },
       {
         path: "/books/:id",

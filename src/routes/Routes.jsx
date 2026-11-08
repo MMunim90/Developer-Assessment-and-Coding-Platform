@@ -41,10 +41,6 @@ const router = createBrowserRouter([
         element: <AllBooks />,
       },
       {
-        path: "/login",
-        element: <Login/>,
-      },
-      {
         path: "/books/:id",
         element: (
           <PrivateRoute>
@@ -61,6 +57,10 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/*",

@@ -20,6 +20,7 @@ import ReturnBooks from "../pages/admin/ReturnBooks";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import HelpCenter from "../pages/HelpCenter";
+import FAQ from "../pages/FAQ";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/faq",
-        element: <ContactUs />,
+        element: <FAQ />,
       },
       {
         path: "/books/:id",

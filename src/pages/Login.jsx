@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { baseURL } from "../services/BaseURL";
 import { AuthContext } from "../context/AuthContext";
-import { Bounce, toast } from "react-toastify";
 import DeveloperTheme from "../components/DeveloperTheme";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -64,20 +64,27 @@ const Login = () => {
       localStorage.setItem("user_token", accessToken);
       setAuthUser(userData);
 
-      toast.success("Login successful! Welcome back.", {
-        position: "top-right",
-        autoClose: 3000,
-        theme: "dark",
-        transition: Bounce,
+      navigate("/", { replace: true });
+
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "Welcome back to DACP.",
+        background: "#111318",
+        color: "#F8FAFC",
+        confirmButtonColor: "#2563EB",
+        confirmButtonText: "Continue",
       });
 
-      navigate("/dashboard", { replace: true });
     } catch (error) {
-      toast.error(error.message || "Something went wrong. Please try again.", {
-        position: "top-right",
-        autoClose: 4000,
-        theme: "dark",
-        transition: Bounce,
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed!",
+        text: error.message || "Something went wrong. Please try again.",
+        background: "#111318",
+        color: "#F8FAFC",
+        confirmButtonColor: "#2563EB",
+        confirmButtonText: "Try Again",
       });
     } finally {
       setLoading(false);
@@ -87,7 +94,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-[#08090D] text-slate-100 lg:grid lg:grid-cols-2">
       {/* ================= LEFT SIDE ================= */}
-      <DeveloperTheme/>
+      <DeveloperTheme />
 
       {/* ================= RIGHT SIDE ================= */}
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-14 sm:px-10">

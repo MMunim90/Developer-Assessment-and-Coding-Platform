@@ -21,6 +21,7 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import HelpCenter from "../pages/HelpCenter";
 import FAQ from "../pages/FAQ";
+import LogedProtected from "./LogedProtected";
 
 const router = createBrowserRouter([
   {
@@ -71,11 +72,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />,
+    element: <LogedProtected><Login/></LogedProtected>,
   },
   {
     path: "/signup",
-    element: <SignUp />,
+    element: <LogedProtected><SignUp /></LogedProtected>,
   },
   {
     path: "/*",

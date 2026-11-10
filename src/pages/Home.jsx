@@ -2,33 +2,39 @@ import FeaturedChallenges from "../components/FeaturedChallenges";
 import FinalCTA from "../components/FinalCTA";
 import HeroBanner from "../components/HeroBanner";
 import Leaderboard from "../components/Leaderboard";
+import PlatformOverview from "../components/PlatformOverview";
 import PlatformStats from "../components/PlatformStats";
 import ProgrammingContests from "../components/ProgrammingContests";
+import TechnicalAssessments from "../components/TechnicalAssessments";
 import WhyDACP from "../components/WhyDACP";
 
 const Home = () => {
   return (
     <div>
-      {/* 01. HeroBanner */}
+      {/* HeroBanner */}
       <HeroBanner />
-      {/* 02. PlatformOverview */}
+      {/* PlatformOverview */}
+      <PlatformOverview />
 
-      {/* 03. Platform Statistics */}
+      {/* Platform Statistics */}
       <PlatformStats />
 
-      {/* 04. Coding Challenges */}
+      {/* Coding Challenges */}
       <FeaturedChallenges />
 
-      {/* 05. Programming Contests */}
+      {/* Programming Contests */}
       <ProgrammingContests />
 
-      {/* 07. Leaderboard */}
+      {/* TechnicalAssessments */}
+      <TechnicalAssessments />
+
+      {/* Leaderboard */}
       <Leaderboard />
 
-      {/* 08. Why DACP */}
+      {/* Why DACP */}
       <WhyDACP />
 
-      {/* 09. Final CTA */}
+      {/* Final CTA */}
       <FinalCTA />
     </div>
   );

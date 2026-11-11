@@ -9,8 +9,11 @@ import {
   CheckCircle2,
   CircleDot,
 } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const HeroBanner = () => {
+  const { authUser } = useContext(AuthContext);
   return (
     <section className="relative overflow-hidden bg-[#08090D] text-white">
       {/* Background Effects */}
@@ -56,24 +59,28 @@ const HeroBanner = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-9">
-            <Link
-              to="/challenges"
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-600/20 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all duration-300"
-            >
-              Explore Challenges
-              <ArrowRight
-                size={18}
-                className="group-hover:translate-x-1 transition-transform"
-              />
-            </Link>
+            {authUser && (
+              <Link
+                to="/challenges"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-600/20 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all duration-300"
+              >
+                Explore Challenges
+                <ArrowRight
+                  size={18}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </Link>
+            )}
 
-            <Link
-              to="/signup"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-white/10 bg-white/[0.04] text-slate-200 font-semibold hover:bg-white/10 hover:border-white/20 transition-all duration-300"
-            >
-              <Play size={17} />
-              Get Started Free
-            </Link>
+            {!authUser && (
+              <Link
+                to="/signup"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-white/10 bg-white/[0.04] text-slate-200 font-semibold hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+              >
+                <Play size={17} />
+                Get Started Free
+              </Link>
+            )}
           </div>
         </div>
 

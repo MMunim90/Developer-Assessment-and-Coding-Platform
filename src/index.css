@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* Normal website cursor */
+body {
+  cursor: url("/cursors/code-cursor.png") 16 16, auto;
+}
+
+/* Interactive elements */
+button,
+a {
+  cursor: url("/cursors/hand-cursor.png") 16 16, pointer;
+}
+
+
 .libraryhub-swal {
   background: linear-gradient(
     to bottom right,

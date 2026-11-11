@@ -7,8 +7,11 @@ import {
   Trophy,
   Sparkles,
 } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const FinalCTA = () => {
+  const { authUser } = useContext(AuthContext);
   return (
     <section className="relative overflow-hidden bg-[#08090D] px-5 py-20 sm:px-8 lg:px-10">
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl border border-blue-500/20 bg-[#111827]">
@@ -42,19 +45,23 @@ const FinalCTA = () => {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                to="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-500"
-              >
-                Get Started Free <ArrowRight size={17} />
-              </Link>
+              {!authUser && (
+                <Link
+                  to="/signup"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-500"
+                >
+                  Get Started Free <ArrowRight size={17} />
+                </Link>
+              )}
 
-              <Link
-                to="/challenges"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-slate-300 transition hover:border-white/20 hover:bg-white/[0.08]"
-              >
-                Explore Challenges <Code2 size={17} />
-              </Link>
+              {authUser && (
+                <Link
+                  to="/challenges"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-slate-300 transition hover:border-white/20 hover:bg-white/[0.08]"
+                >
+                  Explore Challenges <Code2 size={17} />
+                </Link>
+              )}
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs text-slate-500">

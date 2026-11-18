@@ -22,6 +22,7 @@ import SignUp from "../pages/SignUp";
 import HelpCenter from "../pages/HelpCenter";
 import FAQ from "../pages/FAQ";
 import LogedProtected from "./LogedProtected";
+import DashboardHome from "../pages/DashboardHome";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      {
+        path: "/dashboard",
+        element: <DashboardHome/>
+      },
       {
         path: "myReserve",
         element: <MyReserve />,

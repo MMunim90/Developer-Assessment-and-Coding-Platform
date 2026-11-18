@@ -17,7 +17,7 @@ const AdminProtected = ({ children }) => {
     return <Navigate to={"/forbidden"}></Navigate>;
   }
 
-  if (authUser?.role !== "librarian") {
+  if (authUser?.role !== "admin") {
     return <Navigate to={"/forbidden"}></Navigate>;
   }
 

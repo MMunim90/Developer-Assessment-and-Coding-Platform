@@ -4,7 +4,7 @@ A full-stack web application designed to help developers practice coding challen
 
 Built with React, FastAPI, and Supabase PostgreSQL.
 
-- **Backend:** [DACP - Backend](#)
+- **Backend:** [DACP - Backend](https://github.com/MMunim90/DACP-Backend)
 
 ## 🚀 Tech Stack
 

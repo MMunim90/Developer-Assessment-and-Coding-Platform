@@ -17,10 +17,13 @@ import {
   Terminal,
   Activity,
   Fingerprint,
+  CalendarDays,
+  Star,
 } from "lucide-react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../context/AuthContext";
 import { baseURL } from "../services/BaseURL";
+import DeveloperRating from "../components/DeveloperRating";
 
 const API_URL = `${baseURL}/user_profile`;
 const UPDATE_USER_URL = `${baseURL}/update_user`;
@@ -35,6 +38,8 @@ const initialProfile = {
   role: "",
   is_active: false,
   id: null,
+  rating: 0,
+  created_at: "",
 };
 
 const swalTheme = {
@@ -320,6 +325,12 @@ const UserProfile = () => {
     profile.username?.[0]?.toUpperCase() ||
     "D";
 
+  const memberSince = profile.created_at
+    ? String(profile.created_at).slice(0, 4)
+    : "—";
+
+  const developerRating = profile.rating ?? 0;
+
   const inputClass =
     "mt-2 w-full rounded-lg border border-white/10 bg-[#0D1017] px-4 py-3 text-sm text-slate-200 outline-none transition placeholder:text-slate-600 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/10 disabled:cursor-not-allowed disabled:opacity-60";
 
@@ -395,7 +406,7 @@ const UserProfile = () => {
         <section className="relative mb-6 overflow-hidden rounded-xl border border-white/[0.08] bg-[#111318]">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-r from-blue-600/15 via-violet-600/10 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-60 bg-gradient-to-r from-blue-600/15 via-violet-600/10 to-transparent" />
 
           <div className="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
             {/* Avatar */}
@@ -422,6 +433,11 @@ const UserProfile = () => {
                 <AtSign size={15} className="text-blue-400" />
                 {profile.username || "username"}
               </p>
+
+              {/* Developer Rating Title */}
+              <div className="mt-3">
+                <DeveloperRating rating={profile.rating ?? 0} />
+              </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="inline-flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-3 py-2 text-xs font-medium capitalize text-blue-300">
@@ -696,6 +712,31 @@ const UserProfile = () => {
                       }`}
                     />
                     {profile.is_active ? "Active" : "Inactive"}
+                  </span>
+                </div>
+
+                {/* Developer Rating */}
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2 text-sm text-slate-500">
+                    <Star size={15} />
+                    Contest Rating
+                  </span>
+
+                  <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/20 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300">
+                    <Star size={13} />
+                    {developerRating}
+                  </span>
+                </div>
+
+                {/* Member Since */}
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2 text-sm text-slate-500">
+                    <CalendarDays size={15} />
+                    Member Since
+                  </span>
+
+                  <span className="text-sm font-semibold text-blue-300">
+                    {memberSince}
                   </span>
                 </div>
 

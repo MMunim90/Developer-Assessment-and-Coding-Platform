@@ -21,6 +21,7 @@ import {
   ArrowUpRight,
   ShieldAlert,
   Activity,
+  Power,
 } from "lucide-react";
 import Swal from "sweetalert2";
 
@@ -68,6 +69,7 @@ const ManageUsers = () => {
   const [selectedRole, setSelectedRole] = useState("developer");
   const [updating, setUpdating] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [updatingStatusId, setUpdatingStatusId] = useState(null);
 
   // Authorization headers
   const authHeaders = useCallback(
@@ -252,6 +254,71 @@ const ManageUsers = () => {
       });
     } finally {
       setUpdating(false);
+    }
+  };
+
+  // Update user active/inactive status
+  const handleUpdateUserStatus = async (user) => {
+    const newStatus = !user.is_active;
+    const action = newStatus ? "Activate" : "Deactivate";
+
+    const result = await Swal.fire({
+      ...swalTheme,
+      icon: "warning",
+      iconColor: newStatus ? "#34D399" : "#F87171",
+      title: `${action} User?`,
+      text: `Are you sure you want to ${action.toLowerCase()} ${fullName(user)}'s account?`,
+      showCancelButton: true,
+      confirmButtonText: `Yes, ${action}`,
+      cancelButtonText: "Cancel",
+      confirmButtonColor: newStatus ? "#059669" : "#DC2626",
+      cancelButtonColor: "#475569",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) return;
+
+    setUpdatingStatusId(user.id);
+
+    try {
+      const url = new URL(`${baseURL}/admin/update_user_status`);
+      url.searchParams.set("user_id", user.id);
+
+      const response = await fetch(url.toString(), {
+        method: "PUT",
+        headers: authHeaders(true),
+        body: JSON.stringify({
+          is_active: newStatus,
+        }),
+      });
+
+      await readResponse(response);
+
+      // Update the UI immediately
+      setUsers((previous) =>
+        previous.map((item) =>
+          item.id === user.id ? { ...item, is_active: newStatus } : item,
+        ),
+      );
+
+      await Swal.fire({
+        ...swalTheme,
+        icon: "success",
+        title: "Status Updated",
+        text: `${fullName(user)}'s account is now ${newStatus ? "active" : "inactive"}.`,
+        confirmButtonText: "Continue",
+      });
+    } catch (err) {
+      await Swal.fire({
+        ...swalTheme,
+        icon: "error",
+        iconColor: "#F87171",
+        title: "Status Update Failed",
+        text: err.message || "Could not update the user's status.",
+        confirmButtonText: "Try Again",
+      });
+    } finally {
+      setUpdatingStatusId(null);
     }
   };
 
@@ -725,6 +792,41 @@ const ManageUsers = () => {
                             >
                               <Pencil size={14} />
                               Role
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateUserStatus(user)}
+                              disabled={
+                                updatingStatusId === user.id ||
+                                deletingId === user.id
+                              }
+                              title={
+                                user.is_active
+                                  ? "Deactivate user"
+                                  : "Activate user"
+                              }
+                              aria-label={`${user.is_active ? "Deactivate" : "Activate"} ${fullName(user)}`}
+                              className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 ${
+                                user.is_active
+                                  ? "border-amber-500/20 bg-amber-500/10 text-amber-400 hover:border-amber-500/40 hover:bg-amber-500/20"
+                                  : "border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:border-emerald-500/40 hover:bg-emerald-500/20"
+                              }`}
+                            >
+                              {updatingStatusId === user.id ? (
+                                <LoaderCircle
+                                  size={14}
+                                  className="animate-spin"
+                                />
+                              ) : (
+                                <Power size={14} />
+                              )}
+
+                              {updatingStatusId === user.id
+                                ? "Updating..."
+                                : user.is_active
+                                  ? "Deactivate"
+                                  : "Activate"}
                             </button>
 
                             <button

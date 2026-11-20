@@ -19,6 +19,7 @@ import {
   Fingerprint,
   CalendarDays,
   Star,
+  Trophy,
 } from "lucide-react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../context/AuthContext";
@@ -329,7 +330,13 @@ const UserProfile = () => {
     ? String(profile.created_at).slice(0, 4)
     : "—";
 
+  const getMaxRating = (currentRating, previousMaxRating = 0) => {
+    return Math.max(Number(currentRating) || 0, Number(previousMaxRating) || 0);
+  };
+
   const developerRating = profile.rating ?? 0;
+
+  const maxRating = getMaxRating(developerRating, profile.max_rating);
 
   const inputClass =
     "mt-2 w-full rounded-lg border border-white/10 bg-[#0D1017] px-4 py-3 text-sm text-slate-200 outline-none transition placeholder:text-slate-600 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/10 disabled:cursor-not-allowed disabled:opacity-60";
@@ -725,6 +732,18 @@ const UserProfile = () => {
                   <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/20 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300">
                     <Star size={13} />
                     {developerRating}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2 text-sm text-slate-500">
+                    <Trophy size={15} />
+                    Max Rating
+                  </span>
+
+                  <span className="inline-flex items-center gap-1.5 rounded-md border border-violet-500/20 bg-violet-500/10 px-3 py-1.5 text-xs font-semibold text-violet-300">
+                    <Trophy size={13} />
+                    {maxRating}
                   </span>
                 </div>
 

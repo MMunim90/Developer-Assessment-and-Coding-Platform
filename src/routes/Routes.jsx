@@ -16,6 +16,7 @@ import HelpCenter from "../pages/HelpCenter";
 import FAQ from "../pages/FAQ";
 import LogedProtected from "./LogedProtected";
 import DashboardHome from "../pages/DashboardHome";
+import ManageContests from "../pages/admin/ManageContests";
 
 const router = createBrowserRouter([
   {
@@ -85,6 +86,14 @@ const router = createBrowserRouter([
         element: (
           <AdminProtected>
             <ManageUsers />
+          </AdminProtected>
+        ),
+      },
+      {
+        path: "manageContests",
+        element: (
+          <AdminProtected>
+            <ManageContests />
           </AdminProtected>
         ),
       },

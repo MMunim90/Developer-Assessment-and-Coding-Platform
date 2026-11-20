@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router";
 import {
   Trophy,
@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 
 import { baseURL } from "../services/BaseURL";
+import { AuthContext } from "../context/AuthContext";
 
 const ProgrammingContests = () => {
+  const { authUser } = useContext(AuthContext);
   const [contest, setContest] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -203,15 +205,17 @@ const ProgrammingContests = () => {
                 </div>
 
                 {/* CTA */}
-                <div className="relative mt-8">
+                {
+                  authUser && <div className="relative mt-8">
                   <Link
                     to={`/contests/${contest.id}`}
                     className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-600/20 transition hover:bg-violet-500 sm:w-auto"
                   >
-                    Explore Contest
+                    Register
                     <ArrowUpRight size={17} />
                   </Link>
                 </div>
+                }
               </div>
 
               {/* Right Visual Panel */}

@@ -36,6 +36,7 @@ const initialProfile = {
   firstname: "",
   lastname: "",
   phone_number: "",
+  profile_image: "",
   role: "",
   is_active: false,
   id: null,
@@ -114,6 +115,7 @@ const UserProfile = () => {
         firstname: safeProfile.firstname || "",
         lastname: safeProfile.lastname || "",
         phone_number: safeProfile.phone_number || "",
+        profile_image: safeProfile.profile_image || "",
       });
     } catch (error) {
       Swal.fire({
@@ -159,6 +161,7 @@ const UserProfile = () => {
       firstname: profile.firstname || "",
       lastname: profile.lastname || "",
       phone_number: profile.phone_number || "",
+      profile_image: profile.profile_image || "",
     });
   };
 
@@ -190,6 +193,7 @@ const UserProfile = () => {
         firstname: formData.firstname.trim(),
         lastname: formData.lastname.trim(),
         phone_number: formData.phone_number.trim(),
+        profile_image: formData.profile_image.trim() || null,
       };
 
       const response = await fetch(UPDATE_USER_URL, {
@@ -417,8 +421,22 @@ const UserProfile = () => {
 
           <div className="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
             {/* Avatar */}
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-500/20 to-violet-500/20 text-3xl font-bold text-blue-300 shadow-lg shadow-blue-950/30">
-              {initials}
+            {/* Profile Image */}
+            <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-500/20 to-violet-500/20 text-3xl font-bold text-blue-300 shadow-lg shadow-blue-950/30">
+              {/* Initials fallback */}
+              <span>{initials}</span>
+
+              {/* Profile Image */}
+              {(editing ? formData.profile_image : profile.profile_image) && (
+                <img
+                  src={editing ? formData.profile_image : profile.profile_image}
+                  alt="Developer Profile"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              )}
             </div>
 
             {/* Profile Details */}
@@ -612,6 +630,54 @@ const UserProfile = () => {
                       disabled={!editing || savingProfile}
                     />
                   </div>
+                </div>
+
+                {/* Profile Image URL */}
+                <div className="sm:col-span-2">
+                  <label className={labelClass} htmlFor="profile_image">
+                    Profile Image URL
+                  </label>
+
+                  <div className="relative">
+                    <input
+                      id="profile_image"
+                      type="url"
+                      name="profile_image"
+                      value={formData.profile_image}
+                      onChange={handleInputChange}
+                      className={inputClass}
+                      placeholder="https://example.com/profile-image.jpg"
+                      disabled={!editing || savingProfile}
+                    />
+                  </div>
+
+                  <p className="mt-2 text-xs text-slate-500">
+                    Enter a publicly accessible image URL to update your profile
+                    picture.
+                  </p>
+
+                  {/* Live Image Preview */}
+                  {editing && formData.profile_image && (
+                    <div className="mt-4 flex items-center gap-4 rounded-lg border border-white/10 bg-[#0D1017] p-4">
+                      <img
+                        src={formData.profile_image}
+                        alt="Profile Preview"
+                        className="h-16 w-16 rounded-lg border border-white/10 object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-slate-200">
+                          Image Preview
+                        </p>
+                        <p className="mt-1 break-all text-xs text-slate-500">
+                          {formData.profile_image}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

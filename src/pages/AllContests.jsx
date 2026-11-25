@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import {
   Trophy,
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { baseURL } from "../services/BaseURL";
+import { AuthContext } from "../context/AuthContext";
 
 const statusStyles = {
   upcoming: "border-blue-500/20 bg-blue-500/10 text-blue-400",
@@ -37,6 +38,7 @@ const AllContests = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const { authUser } = useContext(AuthContext);
 
   // Fetch all contests.
   const fetchContests = async () => {
@@ -442,13 +444,15 @@ const AllContests = () => {
                       </div>
 
                       {/* View Contest */}
-                      <Link
+                      {
+                        authUser && <Link
                         to={`/contests/${contest.id}`}
                         className="mt-6 flex items-center justify-center gap-2 rounded-xl border border-violet-500/20 bg-violet-500/10 px-4 py-3 text-sm font-semibold text-violet-300 transition hover:border-violet-500/40 hover:bg-violet-500/20"
                       >
                         Register
                         <ArrowUpRight size={16} />
                       </Link>
+                      }
                     </div>
                   </article>
                 );

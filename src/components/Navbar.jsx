@@ -1,4 +1,3 @@
-
 import { Link, NavLink } from "react-router";
 import {
   Code2,
@@ -41,15 +40,10 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-white/[0.08] bg-[#08090D]/90 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         <div className="navbar min-h-[76px] px-0">
-
           {/* Logo */}
           <div className="navbar-start">
-            <Link
-              to="/"
-              className="flex items-center gap-2.5 group"
-            >
+            <Link to="/" className="flex items-center gap-2.5 group">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-all duration-300">
                 <Code2 size={23} className="text-white" />
               </div>
@@ -82,7 +76,6 @@ const Navbar = () => {
 
           {/* Right Side */}
           <div className="navbar-end gap-3">
-
             {authUser ? (
               /* Authenticated User */
               <div className="dropdown dropdown-end">
@@ -91,9 +84,28 @@ const Navbar = () => {
                   role="button"
                   className="flex items-center gap-2 p-1.5 pr-3 rounded-full border border-white/10 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer"
                 >
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
-                    <span className="text-white font-semibold uppercase">
-                      {authUser?.email?.charAt(0) || "U"}
+                  <div className="w-9 h-9 shrink-0 overflow-hidden rounded-full border border-white/10 bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+                    {authUser?.profile_image ? (
+                      <img
+                        src={authUser.profile_image}
+                        alt="Profile"
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                          e.currentTarget.nextElementSibling.style.display =
+                            "flex";
+                        }}
+                      />
+                    ) : null}
+
+                    <span
+                      className={`h-full w-full items-center justify-center text-white font-semibold uppercase ${
+                        authUser?.profile_image ? "hidden" : "flex"
+                      }`}
+                    >
+                      {authUser?.firstname?.charAt(0) ||
+                        authUser?.email?.charAt(0) ||
+                        "U"}
                     </span>
                   </div>
 
@@ -101,10 +113,7 @@ const Navbar = () => {
                     My Account
                   </span>
 
-                  <ChevronDown
-                    size={15}
-                    className="text-slate-400"
-                  />
+                  <ChevronDown size={15} className="text-slate-400" />
                 </div>
 
                 <ul
@@ -171,7 +180,6 @@ const Navbar = () => {
         {/* Mobile Navigation */}
         {mobileMenu && (
           <div className="lg:hidden border-t border-white/[0.08] py-4 space-y-2">
-
             {navItems.map((item) => {
               const Icon = item.icon;
 
@@ -209,7 +217,6 @@ const Navbar = () => {
             )}
           </div>
         )}
-
       </div>
     </header>
   );

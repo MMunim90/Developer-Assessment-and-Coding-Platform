@@ -18,6 +18,7 @@ import LogedProtected from "./LogedProtected";
 import DashboardHome from "../pages/DashboardHome";
 import ManageContests from "../pages/admin/ManageContests";
 import AllContests from "../pages/AllContests";
+import Leaderboard from "../pages/Leaderboard";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/contests",
         element: <AllContests/>,
+      },
+      {
+        path: "/leaderboard",
+        element: <Leaderboard/>,
       },
       {
         path: "/profile",

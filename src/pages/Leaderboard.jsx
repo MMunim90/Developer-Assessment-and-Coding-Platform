@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Trophy,
   Medal,
@@ -14,7 +14,6 @@ import {
   ShieldCheck,
   Zap,
 } from "lucide-react";
-import { AuthContext } from "../context/AuthContext";
 import { baseURL } from "../services/BaseURL";
 import DeveloperRating from "../components/DeveloperRating";
 
@@ -145,29 +144,18 @@ const PodiumCard = ({ user, position }) => {
 };
 
 const Leaderboard = () => {
-  const { accessToken } = useContext(AuthContext);
-
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const fetchLeaderboard = useCallback(async () => {
-    if (!accessToken) {
-      setLoading(false);
-      setError("Please log in to access the leaderboard.");
-      return;
-    }
-
     setLoading(true);
     setError("");
 
     try {
       const response = await fetch(LEADERBOARD_URL, {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       if (!response.ok) {
@@ -190,7 +178,7 @@ const Leaderboard = () => {
     } finally {
       setLoading(false);
     }
-  }, [accessToken]);
+  }, []);
 
   useEffect(() => {
     fetchLeaderboard();

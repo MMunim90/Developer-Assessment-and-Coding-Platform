@@ -1,4 +1,3 @@
-
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router";
 import {
@@ -32,14 +31,20 @@ const ProgrammingContests = () => {
 
         const data = await response.json();
 
-        // Get only upcoming contests and select the nearest one.
+        const now = new Date();
+
         const upcomingContests = data
-          .filter((item) => item.status?.toLowerCase() === "upcoming")
+          .filter(
+            (item) =>
+              item.status?.toLowerCase() === "upcoming" &&
+              new Date(item.start_at) > now,
+          )
           .sort(
             (a, b) =>
-              new Date(a.start_at).getTime() -
-              new Date(b.start_at).getTime()
+              new Date(a.start_at).getTime() - new Date(b.start_at).getTime(),
           );
+
+        setContest(upcomingContests[0] || null);
 
         setContest(upcomingContests[0] || null);
       } catch (error) {
@@ -72,7 +77,6 @@ const ProgrammingContests = () => {
       <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-blue-600/[0.05] blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl">
-
         {/* Section Header */}
         <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
@@ -82,13 +86,12 @@ const ProgrammingContests = () => {
             </div>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Programming{" "}
-              <span className="text-violet-400">Contests</span>
+              Programming <span className="text-violet-400">Contests</span>
             </h2>
 
             <p className="mt-4 text-sm leading-7 text-slate-400 sm:text-base">
-              Challenge yourself, compete with other developers, and prove
-              your problem-solving skills through competitive programming.
+              Challenge yourself, compete with other developers, and prove your
+              problem-solving skills through competitive programming.
             </p>
           </div>
 
@@ -115,23 +118,18 @@ const ProgrammingContests = () => {
             </div>
           </div>
         ) : contest ? (
-
           /* Featured Contest Card */
           <div className="group relative w-full overflow-hidden rounded-2xl border border-violet-500/20 bg-[#111318] transition duration-300 hover:border-violet-500/40">
-
             {/* Top Accent */}
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/70 to-transparent" />
 
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
-
               {/* Main Content */}
               <div className="relative flex flex-col justify-between p-6 sm:p-8 lg:p-10">
-
                 {/* Background Glow */}
                 <div className="pointer-events-none absolute -left-20 top-0 h-64 w-64 rounded-full bg-violet-600/[0.07] blur-[100px]" />
 
                 <div className="relative">
-
                   {/* Badge */}
                   <div className="mb-7 flex flex-wrap items-center gap-3">
                     <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-400">
@@ -141,7 +139,7 @@ const ProgrammingContests = () => {
 
                     <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1.5 text-xs font-medium capitalize text-blue-400">
                       <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-                      Upcoming
+                      {contest.status}
                     </span>
                   </div>
 
@@ -163,24 +161,17 @@ const ProgrammingContests = () => {
                       {contest.category}
                     </div>
                   )}
-
                 </div>
 
                 {/* Contest Details */}
                 <div className="relative mt-9 grid grid-cols-1 gap-4 border-t border-white/[0.07] pt-7 sm:grid-cols-2">
-
                   <div className="flex items-start gap-3">
                     <div className="rounded-lg border border-violet-500/20 bg-violet-500/10 p-2.5">
-                      <CalendarDays
-                        size={19}
-                        className="text-violet-400"
-                      />
+                      <CalendarDays size={19} className="text-violet-400" />
                     </div>
 
                     <div className="min-w-0">
-                      <p className="text-xs text-slate-500">
-                        Starting Date
-                      </p>
+                      <p className="text-xs text-slate-500">Starting Date</p>
                       <p className="mt-1 text-sm font-medium text-slate-200">
                         {formatDate(contest.start_at)}
                       </p>
@@ -193,34 +184,28 @@ const ProgrammingContests = () => {
                     </div>
 
                     <div>
-                      <p className="text-xs text-slate-500">
-                        Contest Duration
-                      </p>
+                      <p className="text-xs text-slate-500">Contest Duration</p>
                       <p className="mt-1 text-sm font-medium text-slate-200">
                         {contest.length} hours
                       </p>
                     </div>
                   </div>
-
                 </div>
 
                 {/* CTA */}
-                {
-                  authUser && <div className="relative mt-8">
+                <div className="relative mt-8">
                   <Link
-                    to={`/contests/${contest.id}`}
+                    to={authUser ? `/contests/${contest.id}` : "/login"}
                     className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-600/20 transition hover:bg-violet-500 sm:w-auto"
                   >
-                    Register
+                    {authUser ? "Register" : "Login to Participate"}
                     <ArrowUpRight size={17} />
                   </Link>
                 </div>
-                }
               </div>
 
               {/* Right Visual Panel */}
               <div className="relative hidden min-h-[360px] overflow-hidden border-l border-white/[0.06] bg-[#0D1017] lg:flex lg:items-center lg:justify-center">
-
                 {contest.cover_image ? (
                   <>
                     <img
@@ -238,7 +223,6 @@ const ProgrammingContests = () => {
                 )}
 
                 <div className="relative z-10 flex w-full flex-col items-center px-8 text-center">
-
                   <div className="relative mb-7">
                     <div className="absolute inset-0 rounded-3xl bg-violet-500/20 blur-2xl" />
 
@@ -268,15 +252,11 @@ const ProgrammingContests = () => {
                     <Radio size={13} className="text-emerald-400" />
                     <span>Registration opportunity available</span>
                   </div>
-
                 </div>
               </div>
-
             </div>
           </div>
-
         ) : (
-
           /* Empty State */
           <div className="rounded-2xl border border-dashed border-white/10 bg-[#111318] px-5 py-16 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-violet-500/20 bg-violet-500/10">
@@ -288,8 +268,8 @@ const ProgrammingContests = () => {
             </h3>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-7 text-slate-500">
-              There are no upcoming programming contests right now.
-              Stay tuned for new challenges and opportunities to compete.
+              There are no upcoming programming contests right now. Stay tuned
+              for new challenges and opportunities to compete.
             </p>
 
             <Link
@@ -301,7 +281,6 @@ const ProgrammingContests = () => {
             </Link>
           </div>
         )}
-
       </div>
     </section>
   );

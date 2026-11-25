@@ -18,7 +18,6 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthContext";
 import { baseURL } from "../../services/BaseURL";
 
-// Convert API datetime into a value suitable for datetime-local input.
 const toLocalDateTimeInput = (date) => {
   if (!date) return "";
   return String(date).slice(0, 16);
@@ -29,7 +28,6 @@ const initialFormData = {
   writers: "",
   category: "",
   description: "",
-  status: "upcoming",
   length: "",
   cover_image: "",
   start_at: "",
@@ -159,7 +157,6 @@ const ManageContests = () => {
       writers: contest.writers || "",
       category: contest.category || "",
       description: contest.description || "",
-      status: contest.status || "upcoming",
       length: contest.length ?? "",
       cover_image: contest.cover_image || "",
       start_at: toLocalDateTimeInput(contest.start_at),
@@ -219,7 +216,6 @@ const ManageContests = () => {
       writers: formData.writers.trim() || null,
       category: formData.category.trim(),
       description: formData.description.trim() || null,
-      status: formData.status,
       length: Number(formData.length),
       cover_image: formData.cover_image.trim() || null,
       start_at: formData.start_at,
@@ -755,7 +751,7 @@ const ManageContests = () => {
                 </div>
 
                 {/* Writers and Status */}
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div>
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-300">
                       Writers
@@ -768,22 +764,6 @@ const ManageContests = () => {
                       placeholder="e.g. DACP Team"
                       className="w-full rounded-xl border border-white/10 bg-[#0D1017] px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500/60"
                     />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-300">
-                      Contest Status
-                    </label>
-                    <select
-                      name="status"
-                      value={formData.status}
-                      onChange={handleChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#0D1017] px-4 py-3 text-sm text-slate-300 outline-none focus:border-blue-500/60"
-                    >
-                      <option value="upcoming">Upcoming</option>
-                      <option value="running">Running</option>
-                      <option value="past">Past</option>
-                    </select>
                   </div>
                 </div>
 

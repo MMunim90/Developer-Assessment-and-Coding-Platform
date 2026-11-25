@@ -444,15 +444,15 @@ const AllContests = () => {
                       </div>
 
                       {/* View Contest */}
-                      {
-                        authUser && <Link
-                        to={`/contests/${contest.id}`}
-                        className="mt-6 flex items-center justify-center gap-2 rounded-xl border border-violet-500/20 bg-violet-500/10 px-4 py-3 text-sm font-semibold text-violet-300 transition hover:border-violet-500/40 hover:bg-violet-500/20"
-                      >
-                        Register
-                        <ArrowUpRight size={16} />
-                      </Link>
-                      }
+                      {authUser && contest.status == "upcoming" && (
+                        <Link
+                          to={`/contests/${contest.id}`}
+                          className="mt-6 flex items-center justify-center gap-2 rounded-xl border border-violet-500/20 bg-violet-500/10 px-4 py-3 text-sm font-semibold text-violet-300 transition hover:border-violet-500/40 hover:bg-violet-500/20"
+                        >
+                          Register
+                          <ArrowUpRight size={16} />
+                        </Link>
+                      )}
                     </div>
                   </article>
                 );

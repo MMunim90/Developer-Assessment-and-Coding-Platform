@@ -1,10 +1,17 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import {
   Trophy,
   Medal,
   Crown,
   ArrowRight,
+  Code2,
+  TrendingUp,
+  LoaderCircle,
 } from "lucide-react";
+
+import { baseURL } from "../services/BaseURL";
+import DeveloperRating from "../components/DeveloperRating";
 
 const rankStyles = [
   {
@@ -27,7 +34,58 @@ const rankStyles = [
   },
 ];
 
-const Leaderboard = ({ developers = [] }) => {
+const getDeveloperName = (developer) => {
+  const fullName =
+    `${developer.firstname || ""} ${developer.lastname || ""}`.trim();
+
+  return fullName || developer.username || "Developer";
+};
+
+const getInitial = (developer) =>
+  getDeveloperName(developer).charAt(0).toUpperCase();
+
+const Leaderboard = () => {
+  const [developers, setDevelopers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Fetch leaderboard data
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(`${baseURL}/leaderboard`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch leaderboard data.");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid leaderboard response.");
+        }
+
+        // Sort users by current rating and maximum rating.
+        const sortedUsers = data.sort(
+          (a, b) =>
+            (Number(b.rating) || 0) - (Number(a.rating) || 0) ||
+            (Number(b.max_rating) || 0) - (Number(a.max_rating) || 0),
+        );
+
+        setDevelopers(sortedUsers.slice(0, 8));
+      } catch (err) {
+        setError(err.message || "Something went wrong.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLeaderboard();
+  }, []);
+
   const topThree = developers.slice(0, 3);
   const remainingDevelopers = developers.slice(3, 8);
 
@@ -36,10 +94,11 @@ const Leaderboard = ({ developers = [] }) => {
       <div className="pointer-events-none absolute left-1/2 top-20 h-80 w-96 -translate-x-1/2 rounded-full bg-blue-600/[0.07] blur-[130px]" />
 
       <div className="relative mx-auto max-w-7xl">
+        {/* Section Header */}
         <div className="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
-              Recognize excellence
+              Recognize Excellence
             </span>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -60,9 +119,26 @@ const Leaderboard = ({ developers = [] }) => {
           </Link>
         </div>
 
-        {developers.length > 0 ? (
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-white/[0.07] bg-[#111318] py-16">
+            <LoaderCircle size={30} className="animate-spin text-blue-400" />
+            <p className="mt-4 text-sm text-slate-400">
+              Loading leaderboard...
+            </p>
+          </div>
+        ) : error ? (
+          /* Error State */
+          <div className="rounded-xl border border-red-500/20 bg-[#111318] px-5 py-12 text-center">
+            <Trophy size={30} className="mx-auto text-slate-600" />
+            <h3 className="mt-4 font-semibold text-white">
+              Unable to Load Leaderboard
+            </h3>
+            <p className="mt-2 text-sm text-slate-500">{error}</p>
+          </div>
+        ) : developers.length > 0 ? (
           <>
-            {/* Top Three */}
+            {/* Top Three Developers */}
             <div className="mb-8 grid items-end gap-4 md:grid-cols-3">
               {topThree.map((developer, index) => {
                 const style = rankStyles[index];
@@ -71,7 +147,7 @@ const Leaderboard = ({ developers = [] }) => {
                 return (
                   <div
                     key={developer.id}
-                    className={`relative overflow-hidden rounded-xl border ${style.border} bg-[#111318] p-6 text-center ${
+                    className={`relative overflow-hidden rounded-xl border ${style.border} bg-[#111318] p-6 text-center transition duration-300 hover:-translate-y-1 ${
                       index === 0
                         ? "md:order-2 md:py-10"
                         : index === 1
@@ -81,10 +157,23 @@ const Leaderboard = ({ developers = [] }) => {
                   >
                     <div className="absolute left-1/2 top-0 h-32 w-32 -translate-x-1/2 rounded-full bg-white/[0.03] blur-2xl" />
 
-                    <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-[#0D1017] text-xl font-bold text-white">
-                      {(developer.name || "D").charAt(0).toUpperCase()}
+                    {/* Developer Avatar */}
+                    <div className="relative mx-auto flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0D1017] text-xl font-bold text-white">
+                      {developer.profile_image ? (
+                        <img
+                          src={developer.profile_image}
+                          alt={getDeveloperName(developer)}
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        getInitial(developer)
+                      )}
                     </div>
 
+                    {/* Rank Icon */}
                     <div
                       className={`relative mx-auto mt-4 flex h-9 w-9 items-center justify-center rounded-lg ${style.background} ${style.color}`}
                     >
@@ -96,75 +185,121 @@ const Leaderboard = ({ developers = [] }) => {
                     </p>
 
                     <h3 className="relative mt-2 truncate text-lg font-bold text-white">
-                      {developer.name}
+                      {getDeveloperName(developer)}
                     </h3>
 
-                    <p className="relative mt-2 text-sm text-slate-400">
-                      {developer.solved ?? "—"} Problems Solved
+                    <p className="relative mt-1 text-xs text-slate-500">
+                      @{developer.username}
                     </p>
 
+                    {/* Developer Rating Badge */}
+                    <div className="relative mt-4 flex justify-center">
+                      <DeveloperRating rating={developer.rating ?? 0} />
+                    </div>
+
+                    {/* Current Rating */}
                     <div className="relative mt-5 border-t border-white/[0.07] pt-4">
-                      <p className={`text-2xl font-bold ${style.color}`}>
-                        {developer.points ?? "—"}
+                      <p className={`text-3xl font-bold ${style.color}`}>
+                        {Number(developer.rating ?? 0).toLocaleString()}
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">Points</p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        Current Rating
+                      </p>
+                    </div>
+
+                    {/* Maximum Rating */}
+                    <div className="relative mt-4 flex items-center justify-center gap-2 text-xs text-slate-500">
+                      <TrendingUp size={14} className="text-emerald-400" />
+                      <span>
+                        Max Rating:{" "}
+                        <span className="font-semibold text-slate-300">
+                          {Number(developer.max_rating ?? 0).toLocaleString()}
+                        </span>
+                      </span>
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {/* Remaining Rankings */}
+            {/* Remaining Developers */}
             {remainingDevelopers.length > 0 && (
               <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-[#111318]">
-                <div className="grid grid-cols-[55px_1fr_100px_100px] gap-3 border-b border-white/[0.07] bg-[#0D1017] px-5 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 sm:grid-cols-[70px_1fr_130px_130px]">
+                <div className="grid grid-cols-[45px_minmax(0,1fr)_100px_100px] gap-2 border-b border-white/[0.07] bg-[#0D1017] px-4 py-4 text-[10px] font-semibold uppercase tracking-wider text-slate-500 sm:grid-cols-[65px_minmax(0,1fr)_150px_130px] sm:px-5">
                   <span>Rank</span>
                   <span>Developer</span>
-                  <span className="text-center">Solved</span>
-                  <span className="text-right">Points</span>
+                  <span className="text-center">Max Rating</span>
+                  <span className="text-right">Rating</span>
                 </div>
 
                 {remainingDevelopers.map((developer, index) => (
                   <div
                     key={developer.id}
-                    className="grid grid-cols-[55px_1fr_100px_100px] items-center gap-3 border-b border-white/[0.05] px-5 py-4 last:border-0 transition hover:bg-white/[0.025] sm:grid-cols-[70px_1fr_130px_130px]"
+                    className="grid grid-cols-[45px_minmax(0,1fr)_100px_100px] items-center gap-2 border-b border-white/[0.05] px-4 py-4 last:border-0 transition hover:bg-white/[0.025] sm:grid-cols-[65px_minmax(0,1fr)_150px_130px] sm:px-5"
                   >
                     <span className="text-sm font-semibold text-slate-500">
                       #{index + 4}
                     </span>
 
                     <div className="flex min-w-0 items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-[#0D1017] text-sm font-semibold text-blue-300">
-                        {(developer.name || "D").charAt(0).toUpperCase()}
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0D1017] text-sm font-semibold text-blue-300">
+                        {developer.profile_image ? (
+                          <img
+                            src={developer.profile_image}
+                            alt={getDeveloperName(developer)}
+                            className="h-full w-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          getInitial(developer)
+                        )}
                       </div>
 
-                      <span className="truncate text-sm font-medium text-slate-200">
-                        {developer.name}
-                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-slate-200">
+                          {getDeveloperName(developer)}
+                        </p>
+                        <p className="truncate text-xs text-slate-500">
+                          @{developer.username}
+                        </p>
+                      </div>
                     </div>
 
                     <span className="text-center text-sm text-slate-400">
-                      {developer.solved ?? "—"}
+                      {Number(developer.max_rating ?? 0).toLocaleString()}
                     </span>
 
-                    <span className="text-right text-sm font-semibold text-blue-400">
-                      {developer.points ?? "—"}
+                    <span className="text-right text-sm font-bold text-blue-400">
+                      {Number(developer.rating ?? 0).toLocaleString()}
                     </span>
                   </div>
                 ))}
               </div>
             )}
+
+            <div className="mt-6 flex items-center justify-between">
+              <p className="text-xs text-slate-500">
+                Showing top {developers.length} developers
+              </p>
+
+            </div>
           </>
         ) : (
+          /* Empty State */
           <div className="rounded-xl border border-dashed border-white/10 bg-[#111318] px-5 py-14 text-center">
-            <Trophy size={30} className="mx-auto text-slate-600" />
+            <Code2 size={30} className="mx-auto text-slate-600" />
+
             <h3 className="mt-4 font-semibold text-white">
-              Your next achievement starts here
+              Your Next Achievement Starts Here
             </h3>
+
             <p className="mt-2 text-sm text-slate-500">
               Developer rankings will appear here when leaderboard data is
               available.
             </p>
+
             <Link
               to="/challenges"
               className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-400 hover:text-blue-300"

@@ -18,7 +18,7 @@ import { AuthContext } from "../context/AuthContext";
 import { baseURL } from "../services/BaseURL";
 import DeveloperRating from "../components/DeveloperRating";
 
-const LEADERBOARD_URL = `${baseURL}/users/leaderboard`;
+const LEADERBOARD_URL = `${baseURL}/leaderboard`;
 
 const getInitials = (user) => {
   const name = `${user.firstname || ""} ${user.lastname || ""}`.trim();

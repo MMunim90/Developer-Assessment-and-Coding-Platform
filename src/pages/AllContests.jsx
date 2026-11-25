@@ -444,12 +444,12 @@ const AllContests = () => {
                       </div>
 
                       {/* View Contest */}
-                      {authUser && contest.status == "upcoming" && (
+                      {contest.status == "upcoming" && (
                         <Link
-                          to={`/contests/${contest.id}`}
+                          to={authUser ? `/contests/${contest.id}` : "/login"}
                           className="mt-6 flex items-center justify-center gap-2 rounded-xl border border-violet-500/20 bg-violet-500/10 px-4 py-3 text-sm font-semibold text-violet-300 transition hover:border-violet-500/40 hover:bg-violet-500/20"
                         >
-                          Register
+                          {authUser ? "Register" : "Login to Participate"}
                           <ArrowUpRight size={16} />
                         </Link>
                       )}

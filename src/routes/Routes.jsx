@@ -106,6 +106,34 @@ const router = createBrowserRouter([
         element: <DashboardHome/>
       },
       {
+        path: "manageAssessments",
+        element: <ComingSoon />
+      },
+      {
+        path: "manageChallenges",
+        element: <ComingSoon />
+      },
+      {
+        path: "submissions",
+        element: <ComingSoon />
+      },
+      {
+        path: "myAssessments",
+        element: <ComingSoon />
+      },
+      {
+        path: "progress",
+        element: <ComingSoon />
+      },
+      {
+        path: "myContests",
+        element: <ComingSoon />
+      },
+      {
+        path: "challenges",
+        element: <ComingSoon />
+      },
+      {
         path: "manageUsers",
         element: (
           <AdminProtected>

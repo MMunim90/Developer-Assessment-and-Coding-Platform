@@ -1,10 +1,10 @@
 import { Code2, Users, Trophy, Send, TrendingUp } from "lucide-react";
 
 const defaultStats = [
-  { label: "Total Problems", value: "—", icon: Code2, suffix: "+" },
-  { label: "Developers", value: "—", icon: Users, suffix: "+" },
-  { label: "Contests", value: "—", icon: Trophy, suffix: "+" },
-  { label: "Submissions", value: "—", icon: Send, suffix: "+" },
+  { label: "Total Problems", value: "3700", icon: Code2, suffix: "+" },
+  { label: "Developers", value: "500", icon: Users, suffix: "+" },
+  { label: "Contests", value: "40", icon: Trophy, suffix: "+" },
+  { label: "Submissions", value: "250", icon: Send, suffix: "+" },
 ];
 
 const PlatformStats = ({ stats = defaultStats }) => {

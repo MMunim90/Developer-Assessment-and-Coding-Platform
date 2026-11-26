@@ -185,7 +185,12 @@ const Leaderboard = () => {
                     </p>
 
                     <h3 className="relative mt-2 truncate text-lg font-bold text-white">
-                      {getDeveloperName(developer)}
+                      <Link
+                        to={`/developers/${developer.id}`}
+                        className="transition-colors duration-200 hover:text-blue-400"
+                      >
+                        {getDeveloperName(developer)}
+                      </Link>
                     </h3>
 
                     <p className="relative mt-1 text-xs text-slate-500">
@@ -241,8 +246,12 @@ const Leaderboard = () => {
                       #{index + 4}
                     </span>
 
-                    <div className="flex min-w-0 items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0D1017] text-sm font-semibold text-blue-300">
+                    <Link
+                      to={`/developers/${developer.id}`}
+                      className="group flex min-w-0 items-center gap-3"
+                    >
+                      {/* Developer Avatar */}
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0D1017] text-sm font-semibold text-blue-300 transition-colors group-hover:border-blue-400/40">
                         {developer.profile_image ? (
                           <img
                             src={developer.profile_image}
@@ -257,15 +266,17 @@ const Leaderboard = () => {
                         )}
                       </div>
 
+                      {/* Developer Information */}
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-slate-200">
+                        <p className="truncate text-sm font-medium text-slate-200 transition-colors duration-200 group-hover:text-blue-400">
                           {getDeveloperName(developer)}
                         </p>
+
                         <p className="truncate text-xs text-slate-500">
                           @{developer.username}
                         </p>
                       </div>
-                    </div>
+                    </Link>
 
                     <span className="text-center text-sm text-slate-400">
                       {Number(developer.max_rating ?? 0).toLocaleString()}
@@ -283,7 +294,6 @@ const Leaderboard = () => {
               <p className="text-xs text-slate-500">
                 Showing top {developers.length} developers
               </p>
-
             </div>
           </>
         ) : (

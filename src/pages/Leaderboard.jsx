@@ -4,7 +4,6 @@ import {
   Medal,
   Crown,
   Search,
-  Code2,
   Star,
   TrendingUp,
   Users,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { baseURL } from "../services/BaseURL";
 import DeveloperRating from "../components/DeveloperRating";
+import { Link } from "react-router";
 
 const LEADERBOARD_URL = `${baseURL}/leaderboard`;
 
@@ -101,7 +101,11 @@ const PodiumCard = ({ user, position }) => {
         />
       )}
 
-      <div className="relative">
+      <Link
+        to={`/developers/${user.id}`}
+        className="group relative"
+        aria-label={`View ${user.username}'s profile`}
+      >
         <Avatar user={user} size={style.size} />
 
         <span
@@ -109,11 +113,14 @@ const PodiumCard = ({ user, position }) => {
         >
           {position}
         </span>
-      </div>
+      </Link>
 
-      <h3 className="mt-4 max-w-full truncate text-sm font-bold text-white">
+      <Link
+        to={`/developers/${user.id}`}
+        className="mt-4 max-w-full truncate text-sm font-bold text-white transition-colors duration-200 hover:text-blue-400"
+      >
         {user.firstname || user.username}
-      </h3>
+      </Link>
 
       <p className="mt-1 max-w-full truncate text-xs text-slate-500">
         @{user.username}
@@ -426,21 +433,25 @@ const Leaderboard = () => {
                       </span>
                     </div>
 
-                    {/* Developer */}
-                    <div className="flex min-w-0 items-center gap-3">
+                    {/* Developer Profile Link */}
+                    <Link
+                      to={`/developers/${user.id}`}
+                      className="group flex min-w-0 items-center gap-3"
+                    >
                       <Avatar user={user} />
 
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-white">
+                        <p className="truncate text-sm font-semibold text-white transition-colors duration-200 group-hover:text-blue-400">
                           {`${user.firstname || ""} ${user.lastname || ""}`.trim() ||
                             user.username ||
                             "Developer"}
                         </p>
-                        <p className="mt-1 truncate text-xs text-slate-500">
+
+                        <p className="mt-1 truncate text-xs text-slate-500 transition-colors group-hover:text-blue-300">
                           @{user.username || "unknown"}
                         </p>
                       </div>
-                    </div>
+                    </Link>
 
                     {/* Developer Level */}
                     <div className="flex items-center justify-between gap-3 md:block">
@@ -497,17 +508,6 @@ const Leaderboard = () => {
             </span>
           </div>
         </section>
-
-        {/* Bottom Note */}
-        <div className="mt-8 flex flex-col items-center justify-center gap-2 text-center">
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-300">
-            <Code2 size={17} className="text-blue-400" />
-            Keep Coding. Keep Improving.
-          </div>
-          <p className="text-xs text-slate-600">
-            Your next challenge could take you to the top.
-          </p>
-        </div>
       </div>
     </main>
   );

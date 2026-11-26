@@ -20,6 +20,7 @@ import ManageContests from "../pages/admin/ManageContests";
 import AllContests from "../pages/AllContests";
 import Leaderboard from "../pages/Leaderboard";
 import ComingSoon from "../pages/ComingSoon";
+import DeveloperPublicProfile from "../pages/DeveloperPublicProfile";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/assessments",
         element: <ComingSoon/>,
+      },
+      {
+        path: "/developers/:developerId",
+        element: <DeveloperPublicProfile/>,
       },
       {
         path: "/profile",

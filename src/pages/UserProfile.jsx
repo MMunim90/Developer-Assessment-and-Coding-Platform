@@ -13,7 +13,6 @@ import {
   EyeOff,
   LoaderCircle,
   CheckCircle2,
-  Code2,
   Terminal,
   Activity,
   Fingerprint,
@@ -973,18 +972,6 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-6 text-center sm:flex-row">
-          <div className="flex items-center gap-2 text-xs text-slate-600">
-            <Code2 size={15} />
-            <span>DACP · Developer Assessment and Coding Platform</span>
-          </div>
-
-          <span className="text-xs text-slate-600">
-            Code. Compete. Evaluate. Excel.
-          </span>
         </div>
       </div>
     </main>

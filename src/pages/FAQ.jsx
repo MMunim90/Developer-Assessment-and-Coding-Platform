@@ -472,12 +472,6 @@ const FAQ = () => {
           </div>
         </section>
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-600">
-          <Code2 size={14} />
-          <span>DACP</span>
-          <span>·</span>
-          <span>Code. Compete. Evaluate. Excel.</span>
-        </div>
       </div>
     </main>
   );

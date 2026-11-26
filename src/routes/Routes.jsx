@@ -19,6 +19,7 @@ import DashboardHome from "../pages/DashboardHome";
 import ManageContests from "../pages/admin/ManageContests";
 import AllContests from "../pages/AllContests";
 import Leaderboard from "../pages/Leaderboard";
+import ComingSoon from "../pages/ComingSoon";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
       {
         path: "/leaderboard",
         element: <Leaderboard/>,
+      },
+      {
+        path: "/challenges",
+        element: <ComingSoon/>,
+      },
+      {
+        path: "/assessments",
+        element: <ComingSoon/>,
       },
       {
         path: "/profile",

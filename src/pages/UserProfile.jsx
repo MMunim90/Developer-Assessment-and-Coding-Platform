@@ -416,7 +416,7 @@ const UserProfile = () => {
         <section className="relative mb-6 overflow-hidden rounded-xl border border-white/[0.08] bg-[#111318]">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-          <div className="absolute inset-x-0 top-0 h-60 bg-gradient-to-r from-blue-600/15 via-violet-600/10 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-100 bg-gradient-to-r from-blue-600/15 via-violet-600/10 to-transparent" />
 
           <div className="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
             {/* Avatar */}

@@ -1,13 +1,64 @@
+import { useEffect, useState } from "react";
 import { Code2, Users, Trophy, Send, TrendingUp } from "lucide-react";
 
+import { baseURL } from "../services/BaseURL";
+
 const defaultStats = [
-  { label: "Total Problems", value: "3700", icon: Code2, suffix: "+" },
-  { label: "Developers", value: "500", icon: Users, suffix: "+" },
-  { label: "Contests", value: "40", icon: Trophy, suffix: "+" },
-  { label: "Submissions", value: "250", icon: Send, suffix: "+" },
+  { label: "Total Problems", value: "—", icon: Code2, suffix: "+" },
+  { label: "Developers", value: "—", icon: Users, suffix: "+" },
+  { label: "Contests", value: "—", icon: Trophy, suffix: "+" },
+  { label: "Submissions", value: "—", icon: Send, suffix: "+" },
 ];
 
-const PlatformStats = ({ stats = defaultStats }) => {
+const PlatformStats = () => {
+  const [stats, setStats] = useState(defaultStats);
+
+  useEffect(() => {
+    const fetchPlatformStats = async () => {
+      try {
+        const response = await fetch(`${baseURL}/platform_stat`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch platform statistics");
+        }
+
+        const data = await response.json();
+
+        setStats([
+          {
+            label: "Total Problems",
+            value: data.total_problems ?? "—",
+            icon: Code2,
+            suffix: "+",
+          },
+          {
+            label: "Developers",
+            value: data.developers ?? "—",
+            icon: Users,
+            suffix: "+",
+          },
+          {
+            label: "Contests",
+            value: data.contests ?? "—",
+            icon: Trophy,
+            suffix: "+",
+          },
+          {
+            label: "Submissions",
+            value: data.submissions ?? "—",
+            icon: Send,
+            suffix: "+",
+          },
+        ]);
+      } catch (error) {
+        console.error("Platform statistics error:", error);
+        setStats(defaultStats);
+      }
+    };
+
+    fetchPlatformStats();
+  }, []);
+
   return (
     <section className="relative overflow-hidden bg-[#08090D] px-5 py-20 sm:px-8 lg:px-10">
       <div className="pointer-events-none absolute inset-0">

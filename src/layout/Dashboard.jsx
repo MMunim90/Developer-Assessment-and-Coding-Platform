@@ -80,6 +80,11 @@ const Dashboard = () => {
             section: "Administration",
             items: [
               {
+                title: "Update Platform Stats",
+                path: "/dashboard/updatePlatformStat",
+                icon: ChartNoAxesCombined,
+              },
+              {
                 title: "Manage Challenges",
                 path: "/dashboard/manageChallenges",
                 icon: Braces,

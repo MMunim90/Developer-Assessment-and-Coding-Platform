@@ -23,6 +23,7 @@ const initialProfile = {
   firstname: "",
   lastname: "",
   username: "",
+  email: "",
   profile_image: "",
   role: "",
   is_active: false,
@@ -153,7 +154,7 @@ const DeveloperPublicProfile = () => {
         <section className="relative mb-6 overflow-hidden rounded-xl border border-white/[0.08] bg-[#111318]">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-          <div className="absolute inset-x-0 top-0 h-60 bg-gradient-to-r from-blue-600/15 via-violet-600/10 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-100 bg-gradient-to-r from-blue-600/15 via-violet-600/10 to-transparent" />
 
           <div className="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
             {/* Avatar */}
@@ -259,6 +260,16 @@ const DeveloperPublicProfile = () => {
                 <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-slate-200">
                   <AtSign size={15} className="text-blue-400" />
                   {profile.username || "Not provided"}
+                </p>
+              </div>
+
+              {/* Email */}
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Email
+                </p>
+                <p className="mt-2 text-sm font-semibold text-slate-200">
+                  {profile.email || "Not provided"}
                 </p>
               </div>
 

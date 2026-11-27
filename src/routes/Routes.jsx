@@ -21,6 +21,7 @@ import AllContests from "../pages/AllContests";
 import Leaderboard from "../pages/Leaderboard";
 import ComingSoon from "../pages/ComingSoon";
 import DeveloperPublicProfile from "../pages/DeveloperPublicProfile";
+import UpdatePlatformStatModal from "../components/UpdatePlatformStatModal";
 
 const router = createBrowserRouter([
   {
@@ -132,6 +133,10 @@ const router = createBrowserRouter([
       {
         path: "challenges",
         element: <ComingSoon />
+      },
+      {
+        path: "updatePlatformStat",
+        element: <UpdatePlatformStatModal />
       },
       {
         path: "manageUsers",
